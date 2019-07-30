@@ -1,13 +1,13 @@
 function FluigOAuthAPI(config) {
     /**
-     * Parâmetro construtor da classe FluigOAuthAPI
+     * Parâmetro construtor da classe DsOAuth
      * 
      * @param config: [Objeto]
-     *  this.config.consumerPublic: [String]
-     *  this.config.consumerSecret: [String]
-     *  this.config.tokenPublic: [String]
-     *  this.config.tokenSecret: [String]
-     *  this.config._url: [String]
+     *  this.config.consumerPublic: [String] = "GET";
+     *  this.config.consumerSecret: [String]= "GET";
+     *  this.config.tokenPublic: [String] = "3be98caa-edfb-4f34-bcb4-27944544e6bb";
+     *  this.config.tokenSecret: [String] = "7a95f0ae-270f-4ceb-ab3c-41934eec81232b1e9f42-34d7-428e-9ab4-6da386ba528f";
+     *  this.config._url: [String] = "http://fluighml.totvsrs.com.br:8080";
      *  this.config.forceRefresh: [Boolean]
      */
     
@@ -118,14 +118,228 @@ function FluigOAuthAPI(config) {
 
     // DocumentServiceRest
     this.document = {
-        listDocument: function(folderId) {
+        activeDocument: function(documentId) {
             var APIData = {
-                url: '/api/public/ecm/document/listDocument/' + folderId,
+                url: '/api/public/ecm/document/activedocument/' + documentId,
                 method: 'GET'
             }
 
             return restAPICall(APIData);
-        }
+        }, 
+        
+        allDocumentsHits: function(documentId) {
+            var APIData = {
+                url: '/api/public/ecm/document/allDocumentsHits/' + documentId,
+                method: 'GET'
+            }
+
+            return restAPICall(APIData);
+        },
+        
+        chunkedUploadURL: function() {
+            var APIData = {
+                url: '/api/public/ecm/document/chunkedUploadURL/',
+                method: 'GET'
+            }
+
+            return restAPICall(APIData);
+        },    
+
+        createDocument: function(description, parentId, attachments) {
+            var APIData = {
+                url: '/api/public/ecm/document/createDocument/',
+                method: 'POST',
+                content: {
+                    description: description,
+                    parentId: parentId,
+                    attachments: attachments
+                }
+            }
+
+            return restAPICall(APIData);
+        },
+
+        createFolder: function(description, parentId) {
+            var APIData = {
+                url: '/api/public/ecm/document/createFolder/',
+                method: 'POST',
+                content: {
+                    description: description,
+                    parentId: parentId
+                }
+            }
+
+            return restAPICall(APIData);
+        },
+        
+        documentHitsByVersion: function(documentId, version) {
+            var APIData = {
+                url: '/api/public/ecm/document/documentHitsByVersion/' + documentId + "/" + version,
+                method: 'GET'
+            }
+
+            return restAPICall(APIData);
+        },
+
+        documentFileThumbnail: function(documentId, version, thumbnail) {
+            var APIData = {
+                url: '/api/public/ecm/document/documentFileThumbnail/' + documentId + "/" + version + "/" + thumbnail,
+                method: 'GET'
+            }
+
+            return restAPICall(APIData);
+        },
+
+        documentFileWithoutZip: function(documentId, version) {
+            var APIData = {
+                url: '/api/public/ecm/document/documentFileWithoutZip/' + documentId + "/" + version,
+                method: 'GET'
+            }
+
+            return restAPICall(APIData);
+        },
+
+        downloadURL: function(documentId) {
+            var APIData = {
+                url: '/api/public/ecm/document/downloadURL/' + documentId,
+                method: 'GET'
+            }
+
+            return restAPICall(APIData);
+        },    
+
+        get: function(documentId, version) {
+            var APIData = {
+                url: '/api/public/ecm/document/' + documentId + "/" + version,
+                method: 'GET'
+            }
+
+            return restAPICall(APIData);
+        },
+
+        getDocumentByDatasetName: function(datasetName) {
+            var APIData = {
+                url: '/api/public/ecm/document/getDocumentByDatasetName/' + datasetName,
+                method: 'GET'
+            }
+
+            return restAPICall(APIData);
+        },
+
+        getLastVersionNonDraft: function(documentId) {
+            var APIData = {
+                url: '/api/public/ecm/document/getLastVersionNonDraft/' + documentId,
+                method: 'GET'
+            }
+
+            return restAPICall(APIData);
+        },
+
+
+        lastDocument: function(documentId) {
+            var APIData = {
+                url: '/api/public/ecm/document/lastDocument/' + documentId,
+                method: 'GET'
+            }
+
+            return restAPICall(APIData);
+        },
+        
+        listDocument: function(documentId) {
+            var APIData = {
+                url: '/api/public/ecm/document/listDocument/' + documentId,
+                method: 'GET'
+            }
+
+            return restAPICall(APIData);
+        },
+
+        listDocumentWithChildren: function(documentId) {
+            var APIData = {
+                url: '/api/public/ecm/document/listDocumentWithChildren/' + documentId,
+                method: 'GET'
+            }
+
+            return restAPICall(APIData);
+        },
+
+        maxUploadSize: function(unity) {
+            var APIData = {
+                url: '/api/public/ecm/document/maxUploadSize/',
+                method: 'GET'
+            }
+
+            var response = restAPICall(APIData);
+            if(unity === undefined) {
+                return response;
+            }
+            else {
+                switch(unity.toLowerCase()) {
+                    default:
+                    case 'b':   return response;
+                    case 'kb':  return (response / 1024);
+                    case 'mb':  return (response / 1024 / 1024);
+                    case 'gb':  return (response / 1024 / 1024 / 1024);
+                }
+            }
+        },
+
+        permissions: function(documentIdList) {
+            var APIData = {
+                url: '/api/public/ecm/document/permissions/',
+                method: 'POST',
+                content: documentIdList
+            }
+
+            return restAPICall(APIData);
+        },
+
+        remove: function(documentId) {
+            var APIData = {
+                url: '/api/public/ecm/document/remove/',
+                method: 'POST',
+                content: {
+                    id: documentId
+                }
+            }
+
+            return (restAPICall(APIData) == "OK");
+        },
+
+        updateDescription: function(id, description) {
+            var APIData = {
+                url: '/api/public/ecm/document/updateDescription/',
+                method: 'POST',
+                content: {
+                    id: id,
+                    description: description
+                }
+            }
+
+            return restAPICall(APIData);
+        },
+
+        updateDocumentFolder: function(documentId, newParentId) {
+            var APIData = {
+                url: '/api/public/ecm/document/updateDocumentFolder/',
+                method: 'POST',
+                content: {
+                    id: documentId,
+                    parentId: newParentId
+                }
+            }
+
+            return restAPICall(APIData);
+        },
+
+        uploadURL: function() {
+            var APIData = {
+                url: '/api/public/ecm/document/uploadURL/',
+                method: 'GET'
+            }
+
+            return restAPICall(APIData);
+        }        
     },
 
     // Funções abstratas para requisições AJAX
