@@ -18,6 +18,28 @@ function FluigOAuthAPI(config) {
     this._url = config.url || "",
     this.forceRefresh = config.forceRefresh || false,
 
+    // CardServiceRest
+    this.card = {
+        create: function(cardData) {
+            var version = cardData.version || 1000;
+
+            var data = {
+                "parentDocumentId": cardData.documentId,
+                "version": version,        
+                "formData": cardData.formData
+            }
+        
+            var APIData = {
+                url: '/api/public/2.0/cards/create',
+                method: 'POST',
+                Accept: 'text/html',
+                content: data
+            }
+
+            return restAPICall(APIData);
+        }
+    },
+
     // DatasetServiceRest
     this.dataset = {
         standardDatasetValues: function(datasetId, filters) {
