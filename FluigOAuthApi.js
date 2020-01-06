@@ -17,6 +17,27 @@ function FluigOAuthAPI(config) {
     this.tokenSecret = config.tokenSecret || "",
     this._url = config.url || "",
     this.forceRefresh = config.forceRefresh || false,
+	
+	// WorkflowServiceRest (V2 API)
+	this.workflow = {
+    	startProcess: function(cardData, processId) {
+
+            var data = {
+	    		  "targetState": cardData.targetState,
+	    		  "comment": cardData.comment,
+	    		  "formFields": cardData.formFields
+            }
+        
+            var APIData = {
+                url: '/process-management/api/v2/processes/'+processId+'/start',
+                method: 'POST',
+                Accept: 'text/html',
+                content: data
+            }
+
+            return restAPICall(APIData);
+    	}
+    },
 
     // CardServiceRest
     this.card = {
