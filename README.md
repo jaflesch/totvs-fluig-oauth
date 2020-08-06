@@ -17,16 +17,16 @@ No projeto, adicione as seguintes dependências de arquivos:
 
 ## Inicie a classe
 ```javascript
-var config = {
+let config = {
 	consumerPublic: "SEU_CONSUMER_KEY",
 	consumerSecret: "SEU_CONSUMER_SECRET",
 	tokenPublic: "USUARIO_APLICATIVO_ACCESS_TOKEN",
 	tokenSecret: "USUARIO_APLICATIVO_TOKEN_SECRET",
 	url: "HOST[:PORTA]"
 }
-var FluigOAuthAPI = new FluigOAuthAPI(config);
+let request = new FluigOAuthAPI(config);
 
-FluigOAuthAPI.dataset.availableDatasets();  // retorna todos os datasets do servidor
+request.dataset.availableDatasets();  // retorna todos os datasets do servidor
 ```
 
 ## Métodos disponíveis
